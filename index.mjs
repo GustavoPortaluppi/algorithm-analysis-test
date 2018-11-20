@@ -1,5 +1,7 @@
 import { banknotesGuloso } from './banknotes-guloso';
 import { balanceBacktracking } from './balance-backtracking';
+import { schoolbagBacktrackingWeight } from './schoolbag-backtracking-weight';
+import { itens } from './utils';
 
 
 /*
@@ -15,6 +17,10 @@ console.log(banknotesGuloso(p, 279));
  * IMPLEMENTAÇÃO 2
  */
 
-console.log('\n\n----- IMPLEMENTAÇÃO 2 -----');
+console.log('\n\n----- IMPLEMENTAÇÃO 2 | Problema da balança -----');
 const w = [5, 8, 3];
 balanceBacktracking(w);
+
+console.log('\n\n----- IMPLEMENTAÇÃO 2 | Problema da mochila -----');
+schoolbagBacktrackingWeight(itens, 100);
+
