@@ -1,8 +1,8 @@
-export function schoolbagBacktrackingWeight(w, total) {
+export function schoolbagBranchAndBoundWeight(w, total) {
 
   const node = { value: 0, esquerda: null, direita: null };
 
-  makeTree(0, w, node);
+  makeTree(0, w, node, total);
 
   // console.log(JSON.stringify(node, null, '\t'));
 
@@ -11,11 +11,16 @@ export function schoolbagBacktrackingWeight(w, total) {
   let path = [];
 
   function findLeaf(node) {
-    if (node.esquerda && node.direita) {
-      node.esquerda.parent = node;
-      node.direita.parent = node;
-      findLeaf(node.esquerda);
-      findLeaf(node.direita);
+    // console.log(node.value);
+    if (node.esquerda || node.direita) {
+      if (node.esquerda) {
+        node.esquerda.parent = node;
+        findLeaf(node.esquerda);
+      }
+      if (node.direita) {
+        node.direita.parent = node;
+        findLeaf(node.direita);
+      }
     } else {
       // console.log(`Folha: ${node.value}`);
       if (diff0 === null) {
@@ -48,11 +53,11 @@ export function schoolbagBacktrackingWeight(w, total) {
   const result = [];
 
   function setResult(index, node) {
-    if (node.esquerda && node.direita) {
-      if (node.esquerda.value === path[index]) {
+    if (node.esquerda || node.direita) {
+      if (node.esquerda && node.esquerda.value === path[index]) {
         result.push('Dentro');
         setResult(index - 1, node.esquerda);
-      } else if (node.direita.value === path[index]) {
+      } else if (node.direita && node.direita.value === path[index]) {
         result.push('Fora');
         setResult(index - 1, node.direita);
       }
@@ -65,13 +70,17 @@ export function schoolbagBacktrackingWeight(w, total) {
 
 }
 
-export function makeTree(index, w, node) {
+export function makeTree(index, w, node, total) {
   if (index < w.length) {
     const esquerda = { value: w[index].weight + node.value, esquerda: null, direita: null };
     const direita = { value: node.value, esquerda: null, direita: null };
-    node.esquerda = esquerda;
-    node.direita = direita;
-    makeTree(index + 1, w, node.esquerda);
-    makeTree(index + 1, w, node.direita);
+    if (esquerda.value <= total) {
+      node.esquerda = esquerda;
+      makeTree(index + 1, w, node.esquerda, total);
+    }
+    if (direita.value <= total) {
+      node.direita = direita;
+      makeTree(index + 1, w, node.direita, total);
+    }
   }
 }

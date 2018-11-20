@@ -20,8 +20,10 @@ export function balanceBacktracking(w) {
       // console.log(`Folha: ${node.value}`);
       if (diff0 === null) {
         diff0 = Math.abs(0 - node.value);
+        path = [node.value];
         auxNode = node.parent;
         while (auxNode) {
+          path.push(auxNode.value);
           // console.log('> ' + auxNode.value);
           auxNode = auxNode.parent;
         }

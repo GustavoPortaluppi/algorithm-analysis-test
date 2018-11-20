@@ -2,6 +2,7 @@ import { banknotesGuloso } from './banknotes-guloso';
 import { balanceBacktracking } from './balance-backtracking';
 import { schoolbagBacktrackingWeight } from './schoolbag-backtracking-weight';
 import { itens } from './utils';
+import { schoolbagBranchAndBoundWeight } from './schoolbag-branch-and-bound-weight';
 
 
 /*
@@ -23,4 +24,11 @@ balanceBacktracking(w);
 
 console.log('\n\n----- IMPLEMENTAÇÃO 2 | Problema da mochila -----');
 schoolbagBacktrackingWeight(itens, 100);
+
+/*
+ * IMPLEMENTAÇÃO 3
+ */
+
+console.log('\n\n----- IMPLEMENTAÇÃO 3 -----');
+schoolbagBranchAndBoundWeight(itens, 100);
 
