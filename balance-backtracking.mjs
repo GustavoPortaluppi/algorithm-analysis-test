@@ -1,4 +1,4 @@
-export function test(w) {
+export function balanceBacktracking(w) {
 
   const node = { value: 0, esquerda: null, direita: null };
 
@@ -41,7 +41,8 @@ export function test(w) {
   }
 
   findLeaf(node);
-  console.log(`\nCAMINHO: ${path}`);
+  console.log('\nCAMINHO');
+  console.log(path);
 
   const result = [];
 

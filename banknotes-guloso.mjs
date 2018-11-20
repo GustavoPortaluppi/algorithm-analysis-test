@@ -1,4 +1,4 @@
-export function banknotesCount(p, value) {
+export function banknotesGuloso(p, value) {
   const array = [];
   let sum = 0;
   p.sort((a, b) => {
