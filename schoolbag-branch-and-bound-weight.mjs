@@ -1,5 +1,12 @@
 export function schoolbagBranchAndBoundWeight(w, total) {
 
+  /*
+   * Ordenamento de array por peso
+   */
+  w.sort((a, b) => {
+    return a.weight < b.weight;
+  });
+
   const node = { value: 0, left: null, right: null };
 
   makeTree(0, w, node, total);

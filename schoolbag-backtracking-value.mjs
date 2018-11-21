@@ -1,10 +1,10 @@
-export function schoolbagBacktrackingWeight(w, total) {
+export function schoolbagBacktrackingValue(w, total) {
 
   /*
-   * Ordenamento de array por peso
+   * Ordenamento de array por valor
    */
   w.sort((a, b) => {
-    return a.weight < b.weight;
+    return a.value < b.value;
   });
 
   const node = { value: 0, left: null, right: null };
