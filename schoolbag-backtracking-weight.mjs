@@ -1,6 +1,6 @@
 export function schoolbagBacktrackingWeight(w, total) {
 
-  const node = { value: 0, esquerda: null, direita: null };
+  const node = { value: 0, left: null, right: null };
 
   makeTree(0, w, node);
 
@@ -11,11 +11,11 @@ export function schoolbagBacktrackingWeight(w, total) {
   let path = [];
 
   function findLeaf(node) {
-    if (node.esquerda && node.direita) {
-      node.esquerda.parent = node;
-      node.direita.parent = node;
-      findLeaf(node.esquerda);
-      findLeaf(node.direita);
+    if (node.left && node.right) {
+      node.left.parent = node;
+      node.right.parent = node;
+      findLeaf(node.left);
+      findLeaf(node.right);
     } else {
       // console.log(`Folha: ${node.value}`);
       if (diff0 === null) {
@@ -48,13 +48,13 @@ export function schoolbagBacktrackingWeight(w, total) {
   const result = [];
 
   function setResult(index, node) {
-    if (node.esquerda && node.direita) {
-      if (node.esquerda.value === path[index]) {
+    if (node.left && node.right) {
+      if (node.left.value === path[index]) {
         result.push('Dentro');
-        setResult(index - 1, node.esquerda);
-      } else if (node.direita.value === path[index]) {
+        setResult(index - 1, node.left);
+      } else if (node.right.value === path[index]) {
         result.push('Fora');
-        setResult(index - 1, node.direita);
+        setResult(index - 1, node.right);
       }
     }
   }
@@ -63,15 +63,27 @@ export function schoolbagBacktrackingWeight(w, total) {
   console.log('\nRESULTADO');
   console.log(result);
 
+  const bag = [];
+  for (let x = 0; x < result.length; x += 1) {
+    if (result[x] === 'Dentro') {
+      bag.push(w[x]);
+    }
+  }
+
+  console.log('\n ITENS NA MOCHILA');
+  for (const b of bag) {
+    console.log(` > ${b.name}: weight: ${b.weight}, value: ${b.value}`);
+  }
+
 }
 
 export function makeTree(index, w, node) {
   if (index < w.length) {
-    const esquerda = { value: w[index].weight + node.value, esquerda: null, direita: null };
-    const direita = { value: node.value, esquerda: null, direita: null };
-    node.esquerda = esquerda;
-    node.direita = direita;
-    makeTree(index + 1, w, node.esquerda);
-    makeTree(index + 1, w, node.direita);
+    const left = { value: w[index].weight + node.value, left: null, right: null };
+    const right = { value: node.value, left: null, right: null };
+    node.left = left;
+    node.right = right;
+    makeTree(index + 1, w, node.left);
+    makeTree(index + 1, w, node.right);
   }
 }

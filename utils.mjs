@@ -1,3 +1,7 @@
+export const cedulas = [2, 2, 5, 5, 5, 5, 5, 10, 10, 10, 10, 20, 20, 50, 50, 50, 100, 100, 100, 100, 100];
+
+export const w = [5, 8, 3, 2, 2, 5, 3, 2];
+
 export const itens = [
   {
     name: 'item 1',

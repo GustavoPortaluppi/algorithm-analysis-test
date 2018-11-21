@@ -1,6 +1,6 @@
 export function balanceBacktracking(w) {
 
-  const node = { value: 0, esquerda: null, direita: null };
+  const node = { value: 0, left: null, right: null };
 
   makeTree(0, w, node);
 
@@ -11,11 +11,11 @@ export function balanceBacktracking(w) {
   let path = [];
 
   function findLeaf(node) {
-    if (node.esquerda && node.direita) {
-      node.esquerda.parent = node;
-      node.direita.parent = node;
-      findLeaf(node.esquerda);
-      findLeaf(node.direita);
+    if (node.left && node.right) {
+      node.left.parent = node;
+      node.right.parent = node;
+      findLeaf(node.left);
+      findLeaf(node.right);
     } else {
       // console.log(`Folha: ${node.value}`);
       if (diff0 === null) {
@@ -30,7 +30,6 @@ export function balanceBacktracking(w) {
       } else if (Math.abs(0 - node.value) < diff0) {
         diff0 = Math.abs(0 - node.value);
         // console.log(`Menor diferença: ${diff0}`);
-        // path
         path = [node.value];
         auxNode = node.parent;
         while (auxNode) {
@@ -49,13 +48,13 @@ export function balanceBacktracking(w) {
   const result = [];
 
   function setResult(index, node) {
-    if (node.esquerda && node.direita) {
-      if (node.esquerda.value === path[index]) {
+    if (node.left && node.right) {
+      if (node.left.value === path[index]) {
         result.push('E');
-        setResult(index - 1, node.esquerda);
-      } else if (node.direita.value === path[index]) {
+        setResult(index - 1, node.left);
+      } else if (node.right.value === path[index]) {
         result.push('D');
-        setResult(index - 1, node.direita);
+        setResult(index - 1, node.right);
       }
     }
   }
@@ -64,15 +63,38 @@ export function balanceBacktracking(w) {
   console.log('\nRESULTADO');
   console.log(result);
 
+  const auxLeft = [];
+  const auxRight = [];
+
+  for (let x = 0; x < result.length; x += 1) {
+    if (result[x] === 'E') {
+      auxLeft.push(w[x]);
+    } else if (result[x] === 'D') {
+      auxRight.push(w[x]);
+    }
+  }
+
+  let sLeft = '';
+  let sRight = '';
+  for (const p of auxLeft) {
+    sLeft += `  ${p}`;
+  }
+  for (const p of auxRight) {
+    sRight += `  ${p}`;
+  }
+
+  console.log(`\n ESQUERDA:${sLeft}`);
+  console.log(`  DIREITA:${sRight}`);
+
 }
 
 export function makeTree(index, w, node) {
   if (index < w.length) {
-    const esquerda = { value: w[index] + node.value, esquerda: null, direita: null };
-    const direita = { value: node.value - w[index], esquerda: null, direita: null };
-    node.esquerda = esquerda;
-    node.direita = direita;
-    makeTree(index + 1, w, node.esquerda);
-    makeTree(index + 1, w, node.direita);
+    const left = { value: w[index] + node.value, left: null, right: null };
+    const right = { value: node.value - w[index], left: null, right: null };
+    node.left = left;
+    node.right = right;
+    makeTree(index + 1, w, node.left);
+    makeTree(index + 1, w, node.right);
   }
 }

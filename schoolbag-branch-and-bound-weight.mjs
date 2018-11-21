@@ -1,6 +1,6 @@
 export function schoolbagBranchAndBoundWeight(w, total) {
 
-  const node = { value: 0, esquerda: null, direita: null };
+  const node = { value: 0, left: null, right: null };
 
   makeTree(0, w, node, total);
 
@@ -12,14 +12,14 @@ export function schoolbagBranchAndBoundWeight(w, total) {
 
   function findLeaf(node) {
     // console.log(node.value);
-    if (node.esquerda || node.direita) {
-      if (node.esquerda) {
-        node.esquerda.parent = node;
-        findLeaf(node.esquerda);
+    if (node.left || node.right) {
+      if (node.left) {
+        node.left.parent = node;
+        findLeaf(node.left);
       }
-      if (node.direita) {
-        node.direita.parent = node;
-        findLeaf(node.direita);
+      if (node.right) {
+        node.right.parent = node;
+        findLeaf(node.right);
       }
     } else {
       // console.log(`Folha: ${node.value}`);
@@ -53,13 +53,13 @@ export function schoolbagBranchAndBoundWeight(w, total) {
   const result = [];
 
   function setResult(index, node) {
-    if (node.esquerda || node.direita) {
-      if (node.esquerda && node.esquerda.value === path[index]) {
+    if (node.left || node.right) {
+      if (node.left && node.left.value === path[index]) {
         result.push('Dentro');
-        setResult(index - 1, node.esquerda);
-      } else if (node.direita && node.direita.value === path[index]) {
+        setResult(index - 1, node.left);
+      } else if (node.right && node.right.value === path[index]) {
         result.push('Fora');
-        setResult(index - 1, node.direita);
+        setResult(index - 1, node.right);
       }
     }
   }
@@ -68,19 +68,30 @@ export function schoolbagBranchAndBoundWeight(w, total) {
   console.log('\nRESULTADO');
   console.log(result);
 
+  const bag = [];
+  for (let x = 0; x < result.length; x += 1) {
+    if (result[x] === 'Dentro') {
+      bag.push(w[x]);
+    }
+  }
+
+  console.log('\n ITENS NA MOCHILA');
+  for (const b of bag) {
+    console.log(` > ${b.name}: weight: ${b.weight}, value: ${b.value}`);
+  }
 }
 
 export function makeTree(index, w, node, total) {
   if (index < w.length) {
-    const esquerda = { value: w[index].weight + node.value, esquerda: null, direita: null };
-    const direita = { value: node.value, esquerda: null, direita: null };
-    if (esquerda.value <= total) {
-      node.esquerda = esquerda;
-      makeTree(index + 1, w, node.esquerda, total);
+    const left = { value: w[index].weight + node.value, left: null, right: null };
+    const right = { value: node.value, left: null, right: null };
+    if (left.value <= total) {
+      node.left = left;
+      makeTree(index + 1, w, node.left, total);
     }
-    if (direita.value <= total) {
-      node.direita = direita;
-      makeTree(index + 1, w, node.direita, total);
+    if (right.value <= total) {
+      node.right = right;
+      makeTree(index + 1, w, node.right, total);
     }
   }
 }

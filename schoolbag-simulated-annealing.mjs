@@ -101,8 +101,8 @@ function Bag(size, dataset) {
     while (this.checkoverweight(modified)) {
       var dropIndex = getRandomAsInt(0, modified.length);
       modified.removeItem(dropIndex);
-      console.log(dropIndex);
-      console.log(modified);
+      // console.log(dropIndex);
+      // console.log(modified);
 
     }
     return modified;
