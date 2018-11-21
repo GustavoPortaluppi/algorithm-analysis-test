@@ -3,6 +3,7 @@ import { balanceBacktracking } from './balance-backtracking';
 import { schoolbagBacktrackingWeight } from './schoolbag-backtracking-weight';
 import { itens } from './utils';
 import { schoolbagBranchAndBoundWeight } from './schoolbag-branch-and-bound-weight';
+import { schoolbagSimulatedAnnealing } from './schoolbag-simulated-annealing';
 
 
 /*
@@ -31,4 +32,9 @@ schoolbagBacktrackingWeight(itens, 100);
 
 console.log('\n\n----- IMPLEMENTAÇÃO 3 -----');
 schoolbagBranchAndBoundWeight(itens, 100);
+
+// ---------------------------
+
+
+schoolbagSimulatedAnnealing();
 
