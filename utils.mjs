@@ -1,8 +1,10 @@
 export const cedulas = [2, 2, 5, 5, 5, 5, 5, 10, 10, 10, 10, 20, 20, 50, 50, 50, 100, 100, 100, 100, 100];
+export const vTotalCedulas = 297;
 
-export const w = [5, 8, 3, 2, 2, 5, 3, 2];
+export const pesos = [5, 8, 3, 2, 2, 5, 3, 2];
 
-export const itens = [
+export const vTotalMochila = 100;
+export const itensMochila = [
   {
     name: 'item 1',
     weight: 100,

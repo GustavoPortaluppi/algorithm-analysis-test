@@ -1,192 +1,156 @@
-/**
- * Will hold each knapsack item
- */
-function Item(w, v, index) {
-  this.weight = w; //Weight of the item
-  this.value = v;  //Weight of the value
-  this.index = index; //Index of the value
+function Item(n, w, v, index) {
+  this.name = n;
+  this.weight = w;
+  this.value = v;
+  this.index = index;
+
   this.print = function () {
-    console.log('Item : w : ' + this.weight + ', v : ' + this.value + '');
+    console.log(` > ${this.name}: weight: ${this.weight}, value: ${this.value}`);
   }
 }
 
-
-/**
- * Knapsack bag
- */
 function Bag(size, dataset) {
 
   this.size = size;
-  this.itemset = []; //Will hold the overall dataset
-  this.currentSolution = []; //will hold the current solution
+  this.itemset = [];
+  this.currentSolution = [];
 
   /**
    * Populates the itemset with the dataset provided above
    */
-  this.prepare = function () {
-    for (var i = 0; i < dataset.length; i++) {
-      var item = new Item(dataset[i][0], dataset[i][1], i);
+  this.prepare = () => {
+    for (let i = 0; i < dataset.length; i += 1) {
+      const item = new Item(dataset[i].name, dataset[i].weight, dataset[i].value, i);
       this.itemset.push(item);
     }
-    var temp = getRandomAsInt(0, this.itemset.length);
+    const temp = getRandomAsInt(0, this.itemset.length);
     this.currentSolution.push(this.getItemBasedOnIndex(this.itemset, temp));
-  }
+  };
 
   /**
    * Gets the items from the itemset provided as an argument based on the index
    */
-  this.getItemBasedOnIndex = function (itemset, index) {
-    var item = null;
-    for (var i = 0; i < itemset.length; i++) {
-      if (itemset[i].index == index) {
-        item = itemset[i];
+  this.getItemBasedOnIndex = (itemset, index) => {
+    let item = null;
+    for (const is of itemset) {
+      if (is.index === index) {
+        item = is;
         break;
       }
     }
     return item;
-  }
+  };
 
   /**
    * Calculates and returns the summation of list of item weights
    */
-  this.getWeightForList = function (itemset) {
-    var sum = 0;
-    for (var i = 0; i < itemset.length; i++) {
-      sum += itemset[i].weight;
+  this.getWeightForList = (itemset) => {
+    let sum = 0;
+    for (const is of itemset) {
+      sum += is.weight;
     }
     return sum;
-  }
+  };
 
   /**
    * Calculates and returns the summation of list of item values
    */
-  this.getValueForList = function (itemset) {
-    var sum = 0;
-    for (var i = 0; i < itemset.length; i++) {
-      sum += itemset[i].value;
+  this.getValueForList = (itemset) => {
+    let sum = 0;
+    for (const is of itemset) {
+      sum += is.value;
     }
     return sum;
-  }
+  };
 
   /**
    * Checks whether current selection is overweight or not
    */
-  this.checkoverweight = function (itemset) {
-    if (this.getWeightForList(itemset) > this.size) {
-      return true;
-    } else
-      return false;
-  }
+  this.checkoverweight = (itemset) => {
+    return this.getWeightForList(itemset) > this.size;
+  };
 
   /**
    * Returns any random item from the itemset which is not in the currentSolution of the bag
    */
-  this.getRandomItemFromItemSet = function () {
-    var temp = getRandomAsInt(0, this.itemset.length);
-    var item = this.getItemBasedOnIndex(this.itemset, temp);
-    while (this.getItemBasedOnIndex(this.currentSolution, temp) != null) {
+  this.getRandomItemFromItemSet = () => {
+    let temp = getRandomAsInt(0, this.itemset.length);
+    let item = this.getItemBasedOnIndex(this.itemset, temp);
+
+    while (this.getItemBasedOnIndex(this.currentSolution, temp) !== null) {
       temp = getRandomAsInt(0, this.itemset.length);
       item = this.getItemBasedOnIndex(this.itemset, temp);
     }
+
     return item;
-  }
+  };
 
   /**
    * Modifies the current selection
    */
-  this.modifySelection = function () {
-    var modified = this.currentSolution.clone();
-    var item = this.getRandomItemFromItemSet();
-    modified.push(item);
-    while (this.checkoverweight(modified)) {
-      var dropIndex = getRandomAsInt(0, modified.length);
-      modified.removeItem(dropIndex);
-      // console.log(dropIndex);
-      // console.log(modified);
+  this.modifySelection = () => {
+    let modified = this.currentSolution.slice(0);
 
+    const item = this.getRandomItemFromItemSet();
+    modified.push(item);
+
+    while (this.checkoverweight(modified)) {
+      const dropIndex = getRandomAsInt(0, modified.length);
+
+      let i = 0;
+      while (i < modified.length) {
+        if (i === dropIndex) {
+          modified.splice(i, 1);
+        }
+        i++;
+      }
     }
+
     return modified;
-  }
+  };
 
   /**
    * Calculates the remaining space in the bag
    */
-  this.calculateRemainingSpace = function (itemset) {
+  this.calculateRemainingSpace = (itemset) => {
     return (this.size - this.getValueForList(itemset));
-  }
+  };
 
-  this.printsolution = function (itemset) {
-    for (var i = 0; i < itemset.length; i++) {
-      var item = itemset[i];
-      item.print();
+  this.printsolution = (itemset) => {
+    console.log('\n ITENS NA MOCHILA');
+    for (const is of itemset) {
+      is.print();
     }
-    console.log('Total value is : ' + this.getValueForList(itemset));
-  }
+    console.log('\n > Total value: ' + this.getValueForList(itemset));
+    console.log(' > Total weight: ' + this.getWeightForList(itemset));
+  };
 
   this.prepare();
 }
 
-/**
- * Returns a random number between minimum (inclusive) and maximum (exclusive)
- */
-function getRandom(min, max) {
-  return Math.random() * (max - min) + min;
-}
-
-/**
- * Returns a random integer between minimum (inclusive) and maximum (exclusive)
- */
 function getRandomAsInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-Array.prototype.clone = function () {
-  return this.slice(0);
-};
+export function schoolbagSimulatedAnnealing(itens, MAX_WEIGHT = 100) {
 
-Array.prototype.removeItem = function (index) {
-  var i = 0;
-  while (i < this.length) {
-    if (i == index) {
-      this.splice(i, 1);
-    }
-    i++;
-  }
-};
-
-
-export function schoolbagSimulatedAnnealing() {
-
-
-  // let MAX_WEIGHT = 15;
-  let MAX_WEIGHT = 100;
   let TEMPERATURE = 500;
   let COOLING_FACTOR = 0.2;
 
-  // let dataset = [
-  //   [1, 2], [4, 2], [5, 4], [3, 6], [9, 4], [10, 8], [8, 5], [6, 7], [7, 3], [11, 8]
-  // ];
+  const acceptanceProbability = (freespace, newfreespace, temperature) => {
+    return (newfreespace < freespace) ? 1.0 : Math.exp((freespace - newfreespace) / temperature);
+  };
 
-  let dataset = [
-    [100, 40], [50, 35], [45, 18], [20, 4], [10, 10], [5, 2]
-  ];
+  let bag = new Bag(MAX_WEIGHT, itens);
 
-  function acceptanceProbability(freespace, newfreespace, temperature) {
-    if (newfreespace < freespace) {
-      return 1.0;
-    }
-    return Math.exp((freespace - newfreespace) / temperature);
-  }
+  let best = bag.currentSolution;
+  let temperature = TEMPERATURE;
 
-
-  let bag = new Bag(MAX_WEIGHT, dataset);
-
-  var best = bag.currentSolution;
-  var temperature = TEMPERATURE;
   while (temperature > 0) {
-    var freespaceLeft = bag.calculateRemainingSpace(bag.currentSolution);
-    var modifiedSolution = bag.modifySelection();
-    var newfreespaceleft = bag.calculateRemainingSpace(modifiedSolution);
+    const freespaceLeft = bag.calculateRemainingSpace(bag.currentSolution);
+    const modifiedSolution = bag.modifySelection();
+    const newfreespaceleft = bag.calculateRemainingSpace(modifiedSolution);
+
     if (acceptanceProbability(freespaceLeft, newfreespaceleft, temperature) >= Math.random()) {
       bag.currentSolution = modifiedSolution;
     }
@@ -194,9 +158,9 @@ export function schoolbagSimulatedAnnealing() {
     if (bag.getValueForList(bag.currentSolution) > bag.getValueForList(best)) {
       best = bag.currentSolution;
     }
+
     temperature -= COOLING_FACTOR;
   }
+
   bag.printsolution(best);
-
-
 }
