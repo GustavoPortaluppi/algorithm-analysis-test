@@ -1,11 +1,11 @@
 import { banknotesGuloso } from './banknotes-guloso';
 import { balanceBacktracking } from './balance-backtracking';
-import { schoolbagBacktrackingWeight } from './schoolbag-backtracking-weight';
-import { schoolbagBacktrackingValue } from './schoolbag-backtracking-value';
-import { schoolbagBacktrackingDensity } from './schoolbag-backtracking-density';
-import { schoolbagBranchAndBoundWeight } from './schoolbag-branch-and-bound-weight';
-import { schoolbagBranchAndBoundValue } from './schoolbag-branch-and-bound-value';
-import { schoolbagBranchAndBoundDensity } from './schoolbag-branch-and-bound-density';
+import { schoolbagBacktracking } from './schoolbag-backtracking';
+// import { schoolbagBacktrackingValue } from './schoolbag-backtracking-value';
+// import { schoolbagBacktrackingDensity } from './schoolbag-backtracking-density';
+import { schoolbagBranchAndBound } from './schoolbag-branch-and-bound';
+// import { schoolbagBranchAndBoundValue } from './schoolbag-branch-and-bound-value';
+// import { schoolbagBranchAndBoundDensity } from './schoolbag-branch-and-bound-density';
 import { schoolbagSimulatedAnnealing } from './schoolbag-simulated-annealing';
 import { cedulas, itensMochila, pesos, vTotalCedulas, vTotalMochila } from './utils';
 
@@ -27,15 +27,15 @@ balanceBacktracking(pesos);
 
 console.log('\n\n       ----- IMPLEMENTAÇÃO 2.2 | Backtracking -----');
 console.log('       ------- Problema da mochila por PESO -------\n');
-schoolbagBacktrackingWeight(itensMochila, vTotalMochila);
+schoolbagBacktracking(itensMochila, vTotalMochila, 'weight');
 
 console.log('\n\n       ----- IMPLEMENTAÇÃO 2.3 | Backtracking -----');
 console.log('       ------ Problema da mochila por VALOR -------\n');
-schoolbagBacktrackingValue(itensMochila, vTotalMochila);
+schoolbagBacktracking(itensMochila, vTotalMochila, 'value');
 
 console.log('\n\n       ----- IMPLEMENTAÇÃO 2.4 | Backtracking -----');
 console.log('       ----- Problema da mochila por DENSIDADE ----\n');
-schoolbagBacktrackingDensity(itensMochila, vTotalMochila);
+schoolbagBacktracking(itensMochila, vTotalMochila, 'density');
 
 /*
  * IMPLEMENTAÇÃO 3
@@ -43,15 +43,15 @@ schoolbagBacktrackingDensity(itensMochila, vTotalMochila);
 
 console.log('\n\n       ----- IMPLEMENTAÇÃO 3.1 | Branch and Bound -----');
 console.log('       --------- Problema da mochila por PESO ---------\n');
-schoolbagBranchAndBoundWeight(itensMochila, vTotalMochila);
+schoolbagBranchAndBound(itensMochila, vTotalMochila, 'weight');
 
 console.log('\n\n       ----- IMPLEMENTAÇÃO 3.2 | Branch and Bound -----');
 console.log('       -------- Problema da mochila por VALOR ---------\n');
-schoolbagBranchAndBoundValue(itensMochila, vTotalMochila);
+schoolbagBranchAndBound(itensMochila, vTotalMochila, 'value');
 
 console.log('\n\n       ----- IMPLEMENTAÇÃO 3.3 | Branch and Bound -----');
 console.log('       ------ Problema da mochila por DENSIDADE -------\n');
-schoolbagBranchAndBoundDensity(itensMochila, vTotalMochila);
+schoolbagBranchAndBound(itensMochila, vTotalMochila, 'density');
 
 /*
  * IMPLEMENTAÇÃO 4
