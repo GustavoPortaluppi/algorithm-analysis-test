@@ -1,7 +1,9 @@
 export function balanceBacktracking(w) {
 
+  // nodo raiz da árvore
   const node = { value: 0, left: null, right: null };
 
+  // monta a árvore solução
   makeTree(0, w, node);
 
   // console.log(JSON.stringify(node, null, '\t'));
@@ -10,6 +12,9 @@ export function balanceBacktracking(w) {
   let diff0 = null;
   let path = [];
 
+  // percorre as folha da árvore solução até encontrar a melhor opção
+  // critério utilizado: a melhor folha é aquela com a menor diferença entre 0 e o valor
+  // utilização de módulo, para considerar tanto números positivos quanto negativos (árvore simétrica)
   function findLeaf(node) {
     if (node.left && node.right) {
       node.left.parent = node;
@@ -45,8 +50,10 @@ export function balanceBacktracking(w) {
   console.log('\nCAMINHO');
   console.log(path);
 
+  // array auxiliar para guardar o caminho da melhor folha até a raiz
   const result = [];
 
+  // função auxiliar para percorrer a árvore da melhor folha até a raiz
   function setResult(index, node) {
     if (node.left && node.right) {
       if (node.left.value === path[index]) {
@@ -66,6 +73,7 @@ export function balanceBacktracking(w) {
   const auxLeft = [];
   const auxRight = [];
 
+  // percorre novamente a árvore, agora da raiz até a melhor folha e salva a solução
   for (let x = 0; x < result.length; x += 1) {
     if (result[x] === 'E') {
       auxLeft.push(w[x]);
@@ -88,9 +96,12 @@ export function balanceBacktracking(w) {
 
 }
 
+// monta a árvore solução
 export function makeTree(index, w, node) {
   if (index < w.length) {
+    // à esquerda: item a esquerda da balança (peso é somado)
     const left = { value: w[index] + node.value, left: null, right: null };
+    // à direita: item a direita da balança (peso é subtraído)
     const right = { value: node.value - w[index], left: null, right: null };
     node.left = left;
     node.right = right;

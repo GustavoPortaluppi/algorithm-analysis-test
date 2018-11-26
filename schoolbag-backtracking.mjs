@@ -21,6 +21,7 @@ export function schoolbagBacktracking(w, total, type) {
 
   const node = { value: 0, left: null, right: null };
 
+  // monta a árvore solução
   makeTree(0, w, node);
 
   // console.log(JSON.stringify(node, null, '\t'));
@@ -29,6 +30,9 @@ export function schoolbagBacktracking(w, total, type) {
   let diff0 = null;
   let path = [];
 
+  // percorre as folha da árvore solução até encontrar a melhor opção
+  // critério utilizado: a melhor folha é aquela com a menor diferença entre 0 e o valor
+  // utilização de módulo, para considerar tanto números positivos quanto negativos (árvore simétrica)
   function findLeaf(node) {
     if (node.left && node.right) {
       node.left.parent = node;
@@ -64,8 +68,10 @@ export function schoolbagBacktracking(w, total, type) {
   console.log('\nCAMINHO');
   console.log(path);
 
+  // array auxiliar para guardar o caminho da melhor folha até a raiz
   const result = [];
 
+  // função auxiliar para percorrer a árvore da melhor folha até a raiz
   function setResult(index, node) {
     if (node.left && node.right) {
       if (node.left.value === path[index]) {
@@ -85,6 +91,7 @@ export function schoolbagBacktracking(w, total, type) {
   const bag = [];
   let totalWeight = 0;
   let totalValue = 0;
+  // percorre novamente a árvore, agora da raiz até a melhor folha e salva a solução
   for (let x = 0; x < result.length; x += 1) {
     if (result[x] === 'Dentro') {
       totalWeight += w[x].weight;
@@ -103,9 +110,12 @@ export function schoolbagBacktracking(w, total, type) {
 
 }
 
+// monta a árvore solução
 export function makeTree(index, w, node) {
   if (index < w.length) {
+    // à esquerda: item dentro mochila (peso é somado)
     const left = { value: w[index].weight + node.value, left: null, right: null };
+    // à direita: item fora da mochila (peso é ignorado)
     const right = { value: node.value, left: null, right: null };
     node.left = left;
     node.right = right;
