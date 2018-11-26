@@ -11,12 +11,15 @@ function Item(n, w, v, index) {
 
 function Bag(size, dataset) {
 
+  // peso máximo da mochila
   this.size = size;
+  // array de controle
   this.itemset = [];
+  // array auxiliar para guardar a melhor solução até o momento
   this.currentSolution = [];
 
   /**
-   * Populates the itemset with the dataset provided above
+   * popular array de controle
    */
   this.prepare = () => {
     for (let i = 0; i < dataset.length; i += 1) {
@@ -24,11 +27,13 @@ function Bag(size, dataset) {
       this.itemset.push(item);
     }
     const temp = getRandomAsInt(0, this.itemset.length);
+
+    // gera uma solução aleatória inicial
     this.currentSolution.push(this.getItemBasedOnIndex(this.itemset, temp));
   };
 
   /**
-   * Gets the items from the itemset provided as an argument based on the index
+   * retorna um item do array de controle de acordo com índice desejado
    */
   this.getItemBasedOnIndex = (itemset, index) => {
     let item = null;
@@ -42,7 +47,7 @@ function Bag(size, dataset) {
   };
 
   /**
-   * Calculates and returns the summation of list of item weights
+   * retorna o weight total do array de controle
    */
   this.getWeightForList = (itemset) => {
     let sum = 0;
@@ -53,7 +58,7 @@ function Bag(size, dataset) {
   };
 
   /**
-   * Calculates and returns the summation of list of item values
+   * retorna o valor total do array de controle
    */
   this.getValueForList = (itemset) => {
     let sum = 0;
@@ -64,14 +69,14 @@ function Bag(size, dataset) {
   };
 
   /**
-   * Checks whether current selection is overweight or not
+   * verifica se o array de controle está dentro do peso máximo estipulado
    */
   this.checkoverweight = (itemset) => {
     return this.getWeightForList(itemset) > this.size;
   };
 
   /**
-   * Returns any random item from the itemset which is not in the currentSolution of the bag
+   * retorna um item aleatório que ainda não esteja no array solução
    */
   this.getRandomItemFromItemSet = () => {
     let temp = getRandomAsInt(0, this.itemset.length);
@@ -86,14 +91,18 @@ function Bag(size, dataset) {
   };
 
   /**
-   * Modifies the current selection
+   * gera uma solução vizinha aleatória
    */
   this.modifySelection = () => {
+    // salva a solução atual
     let modified = this.currentSolution.slice(0);
 
+    // adiciona um item aleatório que ainda não está na mochila
     const item = this.getRandomItemFromItemSet();
     modified.push(item);
 
+    // checa o peso total da mochila
+    // enquanto for maior que o máximo definido, retira um item aleatório
     while (this.checkoverweight(modified)) {
       const dropIndex = getRandomAsInt(0, modified.length);
 
@@ -110,7 +119,7 @@ function Bag(size, dataset) {
   };
 
   /**
-   * Calculates the remaining space in the bag
+   * retorna o espaço restante na mochila de acordo com os itens que já foram adicionados
    */
   this.calculateRemainingSpace = (itemset) => {
     return (this.size - this.getValueForList(itemset));
@@ -134,9 +143,16 @@ function getRandomAsInt(min, max) {
 
 export function schoolbagSimulatedAnnealing(itens, MAX_WEIGHT = 100) {
 
+  // valor utilizado como parâmetro para testar as soluções
   let TEMPERATURE = 500;
+  // fator de resfriamento
+  // fator/limiar utilizado como auxiliar no cálculo da temperatura
   let COOLING_FACTOR = 0.2;
 
+  // calcula a probabilidade de aceitação da solução de acordo com a temperatura
+  // relação diretamente proporcional
+  // temperatura maior: aceitação com mais facilidade/frequencia
+  // temperatura menor: aceitação mais seletiva
   const acceptanceProbability = (freespace, newfreespace, temperature) => {
     return (newfreespace < freespace) ? 1.0 : Math.exp((freespace - newfreespace) / temperature);
   };
@@ -146,19 +162,28 @@ export function schoolbagSimulatedAnnealing(itens, MAX_WEIGHT = 100) {
   let best = bag.currentSolution;
   let temperature = TEMPERATURE;
 
+  // enquanto a temperatura for "alta"
   while (temperature > 0) {
+    // verifica o espaço restante na mochila
     const freespaceLeft = bag.calculateRemainingSpace(bag.currentSolution);
+    // gera uma solução vizinha aleatória
     const modifiedSolution = bag.modifySelection();
+    // verifica novamente o espaço restante na mochila
     const newfreespaceleft = bag.calculateRemainingSpace(modifiedSolution);
 
+    // checa a probabilidade de aceitação da solução encontrada
     if (acceptanceProbability(freespaceLeft, newfreespaceleft, temperature) >= Math.random()) {
+      // se for o caso, a solução encontrada passa a ser a solução atual
       bag.currentSolution = modifiedSolution;
     }
 
+    // compara o valor total da solução atual com a melhor solução encontrada até o momento
     if (bag.getValueForList(bag.currentSolution) > bag.getValueForList(best)) {
+      // se for melhor, a solução atual passa a ser a melhor solução até o momento
       best = bag.currentSolution;
     }
 
+    // diminiu a temperatura de acordo com o fator de resfriamento
     temperature -= COOLING_FACTOR;
   }
 
